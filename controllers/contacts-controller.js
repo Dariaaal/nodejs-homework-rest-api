@@ -7,7 +7,13 @@ const { ctrlWrapper } = require('../helpers');
 const { addSchema, favouriteSchema } = require("../schemas/contacts");
 
 const getAll = async (req, res) => {
-	const contacts = await Contact.find();
+	const {_id: owner} = req.user;
+	const { page = 1, limit = 10 } = req.query;
+	const skip = (page - 1) * limit;
+	const contacts = await Contact.find({ owner }, "-createdAt -updatedAT", {
+		skip,
+		limit,
+	  }).populate("owner", "subscription email");
 	res.json(contacts);
 }
 
@@ -25,7 +31,8 @@ const addContact = async (req, res) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-	const addedContact = await Contact.create(req.body);
+	const {_id: owner} = req.user;
+	const addedContact = await Contact.create({...req.body, owner});
 	res.status(201).json(addedContact);
 }
 
