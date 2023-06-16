@@ -14,6 +14,7 @@ const getAll = async (req, res) => {
 		skip,
 		limit,
 	  }).populate("owner", "subscription email");
+
 	res.json(contacts);
 }
 
@@ -31,8 +32,10 @@ const addContact = async (req, res) => {
     if (error) {
       throw HttpError(400, error.message);
     }
+
 	const {_id: owner} = req.user;
 	const addedContact = await Contact.create({...req.body, owner});
+
 	res.status(201).json(addedContact);
 }
 
