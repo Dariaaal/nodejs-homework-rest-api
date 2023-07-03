@@ -2,22 +2,6 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
-const sgMail = require("@sendgrid/mail");
-
-const { SENDGRID_API_KEY } = process.env;
-
-sgMail.setApiKey(SENDGRID_API_KEY);
-
-const email = {
-  to: "regam25622@edulena.com",
-  from: "1406dariaal@gmail.com",
-  subject: "Test",
-  html: "<p>Test email</p>",
-};
-
-sgMail.send(email)
-  .then(() => console.log("Email send success"))
-  .catch((error) => console.log(error.message));
 
 const contactsRouter = require("./routes/api/contacts");
 const authRouter = require("./routes/api/auth");
